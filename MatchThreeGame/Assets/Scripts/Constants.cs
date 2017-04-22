@@ -4,25 +4,48 @@ using System.Linq;
 using System.Text;
 
 
-    public static class Constants
-    {
-        public static readonly int Rows = 9;
+public static class Constants
+{
+/// <summary>
+/// gameplay constants
+/// </summary>
+    public static readonly int Rows = 9;
     public static readonly int Columns = 9;
-        public static readonly float AnimationDuration =  0.2f;
+    public static readonly float AnimationDuration =  0.2f;
 
-        public static readonly float MoveAnimationMinDuration = 0.05f;
+    public static readonly float MoveAnimationMinDuration = 0.05f;
 
-        public static readonly float ExplosionDuration = 0.3f;
+    public static readonly float ExplosionDuration = 0.3f;
 
-        public static readonly float WaitBeforePotentialMatchesCheck = 2f;
-        public static readonly float OpacityAnimationFrameDelay = 0.05f;
+    public static readonly float WaitBeforePotentialMatchesCheck = 2f;
+    public static readonly float OpacityAnimationFrameDelay = 0.05f;
 
-        public static readonly int MinimumMatches = 3;
-        public static readonly int MinimumMatchesForBonus = 4;
+    public static readonly int MinimumMatches = 3;
+    public static readonly int MinimumMatchesForBonus = 4;
 
-        public static readonly int Match3Score = 60;
-        public static readonly int SubsequentMatchScore = 1000;
-    }
+    public static readonly int Match3Score = 60;
+    public static readonly int SubsequentMatchScore = 1000;
 
-   
+    public static readonly int goalSteps = 8000;
+
+
+/// <summary>
+/// store cost constants
+/// </summary>
+    public static readonly int refreshLives_Cost = 5;
+    public static readonly int increaseLives_Cost = 15;
+
+/// <summary>
+/// reward constants
+/// </summary>
+    public static readonly int dailyReward = 10;
+        
+/// <summary>
+    /// life recharge counter
+    /// </summary>
+    public static float lifeRechageTime = 30 * 60f; 
+
+}
+
+
 

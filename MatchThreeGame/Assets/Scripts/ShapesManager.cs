@@ -3,6 +3,8 @@ using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 
 public class ShapesManager : MonoBehaviour
@@ -45,8 +47,8 @@ public class ShapesManager : MonoBehaviour
     // Use this for initialization
     public void Start()
     {
-
-        initLevelManagerandData(); 
+        levelData = new LevelData(PlayerVariables.currentLevel);
+        levelManager = new LevelManager();
 
         InitializeTypesOnPrefabShapesAndBonuses();
 
@@ -54,26 +56,6 @@ public class ShapesManager : MonoBehaviour
 
         StartCheckForPotentialMatches();
 
-    }
-
-    void initLevelManagerandData()
-    {
-        levelManager = new LevelManager(levelName);
-        levelData = levelManager.getLevelData();
-        Debug.Log(levelName);
-        Debug.Log(levelData.tiles);
-
-    }
-
-    private bool shouldGameEnd()
-    {
-        if (score > levelData.targetScore || remainingMoves < 1)
-        {
-            return true;
-        } else
-        {
-            return false;
-        }
     }
 
     /// <summary>
@@ -140,34 +122,35 @@ public class ShapesManager : MonoBehaviour
         {
             for (int column = 0; column < Constants.Columns; column++)
             {
+                GameObject newCandy = GetRandomCandy();
 
-                if (levelData.tiles[row, column] == 0)
+                //check if two previous horizontal are of the same type
+                while (column >= 2 && shapes[row, column - 1].GetComponent<Shape>()
+                    .IsSameType(newCandy.GetComponent<Shape>())
+                    && shapes[row, column - 2].GetComponent<Shape>().IsSameType(newCandy.GetComponent<Shape>()))
                 {
-                    
-                    InstantiateAndPlaceNewCandy(row, column, CandyPrefabs[5]);
-
-                } else
-                {
-                    GameObject newCandy = GetRandomCandy();
-
-                        //check if two previous horizontal are of the same type
-                        while (column >= 2 && shapes[row, column - 1].GetComponent<Shape>()
-                            .IsSameType(newCandy.GetComponent<Shape>())
-                            && shapes[row, column - 2].GetComponent<Shape>().IsSameType(newCandy.GetComponent<Shape>()))
-                        {
-                            newCandy = GetRandomCandy();
-                        }
-
-                        //check if two previous vertical are of the same type
-                        while (row >= 2 && shapes[row - 1, column].GetComponent<Shape>()
-                            .IsSameType(newCandy.GetComponent<Shape>())
-                            && shapes[row - 2, column].GetComponent<Shape>().IsSameType(newCandy.GetComponent<Shape>()))
-                        {
-                            newCandy = GetRandomCandy();
-                        }
-
-                        InstantiateAndPlaceNewCandy(row, column, newCandy);
+                    newCandy = GetRandomCandy();
                 }
+
+                //check if two previous vertical are of the same type
+                while (row >= 2 && shapes[row - 1, column].GetComponent<Shape>()
+                    .IsSameType(newCandy.GetComponent<Shape>())
+                    && shapes[row - 2, column].GetComponent<Shape>().IsSameType(newCandy.GetComponent<Shape>()))
+                {
+                    newCandy = GetRandomCandy();
+                }
+
+                InstantiateAndPlaceNewCandy(row, column, newCandy);
+
+                //if (levelData.tiles[row, column] == 0)
+                //{
+
+                //    InstantiateAndPlaceNewCandy(row, column, CandyPrefabs[5]);
+
+                //} else
+                //{
+
+                //}
             }
         }
 
@@ -386,10 +369,7 @@ public class ShapesManager : MonoBehaviour
             timesRun++;
         }
 
-        if (shouldGameEnd())
-        {
-            Debug.Log("end game");
-        }
+        levelManager.manageLevelState(score, levelData.targetScore, remainingMoves);  
         state = GameState.None;
         StartCheckForPotentialMatches();
     }
@@ -508,9 +488,9 @@ public class ShapesManager : MonoBehaviour
 
     private void ShowScore()
     {
-       // ScoreText.text = "Score: " + score.ToString();
-       // ScoreText.text =  score.ToString() + " / " + levelData.targetScore.ToString();
-        ScoreText.text = playerVariables.PlayerJson.GetField("_id").ToString(); 
+        //ScoreText.text = "Score: " + score.ToString();
+        //ScoreText.text = score.ToString() + " / " + levelData.targetScore.ToString();
+
     }
 
     /// <summary>

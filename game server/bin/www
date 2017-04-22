@@ -20,14 +20,38 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+var io = require('socket.io')(server);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
+
+io.on('connection', function(socket) {
+    console.info('New client connected (id=' + socket.id + ').');
+    clients.push(socket);
+
+    // When socket disconnects, remove it from the list:
+    socket.on('disconnect', function() {
+        var index = clients.indexOf(socket);
+        if (index != -1) {
+            clients.splice(index, 1);
+            console.info('Client gone (id=' + socket.id + ').');
+        }
+    });
+});
+// io.on('connection', function (socket) {
+//   socket.emit('news', { hello: 'world' });
+//   socket.on('my other event', function (data) {
+//     console.log(data);
+//   });
+// });
+
+
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
 
 /**
  * Normalize a port into a number, string, or false.

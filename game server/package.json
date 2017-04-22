@@ -16,7 +16,8 @@
     "morgan": "~1.7.0",
     "nano": "^6.2.0",
     "request": "^2.80.0",
-    "serve-favicon": "~2.3.2"
+    "serve-favicon": "~2.3.2",
+    "socket.io": "^1.7.3"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"

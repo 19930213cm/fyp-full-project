@@ -3,6 +3,31 @@ var  initDb = require("./initDb.js");
 
 var nano = initDb.nano;
 
+function sendFitnessData(data, callback){
+    var playerDb = nano.db.use("match3players");
+
+    async.waterfall([
+      function getPlayerDoc(asyncCb){
+        playerDb.get(data.email, function( err, doc){
+          asyncCb(err, doc);
+        })
+      },
+      function updateAndPostPlayerDoc( doc, asyncCb){
+        doc.todaysSteps = data.steps;
+        doc.lastLogin = new Date(data.date);
+        playerDb.insert(doc, function( err, res){
+          asyncCb(err, res);
+        })
+      }
+    ], function (err, res ){
+      if (err){
+        callback(err);
+      } else {
+        callback( null, res);
+      }
+    })
+}
+
 function findPlayer(player, email) {
   return player.email === email;
 }
@@ -189,7 +214,13 @@ function getPlayerDoc(playerId, callback){
             currentStars: 0,
             bonuses : {
 
-            }
+            },
+            levels: {
+
+            },
+            lives: 5,
+            currentLevel: 1,
+            dailyClaimed: false
           }
         }
         playerDb.insert(response.body, playerId, function(err, res){
@@ -203,15 +234,44 @@ function getPlayerDoc(playerId, callback){
         callback(err)
       }
     } else {
+      var d = new Date();
+      var lastLogin = doc.lastLogin;
+      var dailyClaimed = doc.dailyClaimed;
+      if (dailyClaimed == true){
+        if (lastLogin.getDate() != d.getDate()){
+          dailyClaimed = false
+        }
+      }
+      doc.lastLogin = d;
       callback(null, doc)
     }
   })
 
 }
 
+function postPlayerDoc(player, callback){
+  var playerDb = nano.db.use("match3players");
+  playerDb.get(player.email, function( err, doc){
+    if (err){
+      callback(err );
+    } else {
+      player._rev = doc._rev;
+      console.log(player);
+      playerDb.insert(player, function( err, res){
+        if (err){
+          callback(err);
+        } else {
+          callback(null, res);
+        }
+      })
+    }
+  })
+}
 
 var exports = module.exports = {};
 exports.processPlayerScore = processPlayerScore;
 exports.getTopScores = getTopScores;
 exports.getScoresAroundPlayer = getScoresAroundPlayer;
 exports.getPlayerDoc = getPlayerDoc;
+exports.sendFitnessData = sendFitnessData;
+exports.postPlayerDoc = postPlayerDoc;

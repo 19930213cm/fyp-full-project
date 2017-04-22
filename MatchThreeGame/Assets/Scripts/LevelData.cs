@@ -50,8 +50,8 @@ public class LevelData
               {1, 1, 1, 1, 1, 1, 1, 1, 1 }
         };
 
-        targetScore = 1000; 
-        moves = 15; 
+        targetScore = 5000000; 
+        moves = 1; 
     }
 
     void level1()
@@ -66,7 +66,7 @@ public class LevelData
               {1, 1, 1, 1, 1, 1, 1, 1, 1 },
               {0, 1, 1, 0, 0, 0, 1, 1, 0 } };
 
-        targetScore = 1000;
+        targetScore = 10;
         moves = 15;
     }
 
@@ -82,7 +82,7 @@ public class LevelData
               {1, 0, 0, 1, 1, 1, 0, 0, 1 },
               {1, 1, 0, 0, 1, 0, 0, 1, 1 } };
 
-        targetScore = 1000; 
+        targetScore = 10; 
         moves = 15;
     }
     void level3()
@@ -97,7 +97,7 @@ public class LevelData
               {1, 0, 1, 1, 1, 1, 1, 0, 1 },
               {0, 0, 1, 0, 0, 0, 1, 0, 0 } };
 
-        targetScore = 1000; 
+        targetScore = 10; 
         moves = 10;
     }
 
@@ -113,7 +113,7 @@ public class LevelData
               {0, 0, 0, 0, 0, 0, 0, 0, 0 },
               {0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
-        targetScore = 1000; 
+        targetScore = 10; 
         moves = 15; 
     }
  }

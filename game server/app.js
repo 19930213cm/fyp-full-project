@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var request = require("request");
+
 var automate = require("./src/wheelchairMonitoringFunctions.js")
 
 var initDb = require("./src/initDb");
@@ -13,6 +14,10 @@ var playerDatabaseFunctions = require("./src/playerDatabaseFunctions.js");
 var index = require('./routes/index');
 var users = require('./routes/users');
 var match3 = require("./routes/match3")
+
+
+
+
 
 // FOR ADDING VALUES TO THE HIGH SCORE DB
 ////////////////////////////////////////////////////////////////////////////////
