@@ -227,7 +227,7 @@ function getPlayerDoc(playerId, callback){
       if (err.statusCode == 404){
         var response = {
           statusCode: 200,
-          message: "new player doc created",          
+          message: "new player doc created",
           body: {
             email: playerId,
             name: "",
@@ -276,6 +276,7 @@ function getPlayerDoc(playerId, callback){
 
 function postPlayerDoc(player, callback){
   var playerDb = nano.db.use("match3players");
+  var historicalDb = nano.db.use("historical");
   playerDb.get(player.email, function( err, doc){
     if (err){
       callback(err );
@@ -286,7 +287,17 @@ function postPlayerDoc(player, callback){
         if (err){
           callback(err);
         } else {
-          callback(null, res);
+          var historicalDoc = player;
+          historicalDoc.email = historicalDoc._id;
+          delete historicalDoc._rev;
+          delete historicalDoc._id;
+          historicalDb.insert(historicalDoc, function( err, res){
+            if (err){
+              callback(err);
+            } else {
+              callback(null, res);
+            }
+          })
         }
       })
     }

@@ -6,13 +6,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var request = require("request");
 
-var automate = require("./src/wheelchairMonitoringFunctions.js")
+
 
 var initDb = require("./src/initDb");
 var playerDatabaseFunctions = require("./src/playerDatabaseFunctions.js");
 
-var index = require('./routes/index');
-var users = require('./routes/users');
 var match3 = require("./routes/match3")
 
 
@@ -71,8 +69,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var userdb = initDb.users;
 
-app.use('/', index);
-app.use('/users', users);
 app.use('/match3', match3)
 
 // catch 404 and forward to error handler
@@ -93,8 +89,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// app.listen(3000, function () {
-//   console.log('Example app listening on port 3000!')
-// })
+
 
 module.exports = app;

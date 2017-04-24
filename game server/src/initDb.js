@@ -1,5 +1,4 @@
 
-var dbContents = require("./initDbContents.js");
 
 var nano = require('nano')("http://localhost:5984", function(err, res){
   if ("err"){
