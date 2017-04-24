@@ -23,7 +23,8 @@ public class levelSelectSceneManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        updateHud(); 
+        updateHud();
+
     }
 
     void OnDestroy()
@@ -70,7 +71,11 @@ public class levelSelectSceneManager : MonoBehaviour {
              //= this.GetComponentsInChildren<Button>(); 
             for (int i = playersCurrentLevel; i < buttons.Length; i++)
             {
-                buttons[i].interactable = false;   
+                if (PlayerVariables.getInt("lives") < 1)
+                {
+                    buttons[i].interactable = false;
+                    buttons[i].GetComponent<Text>().text = "Out of lives";
+                }
             }
         }
 

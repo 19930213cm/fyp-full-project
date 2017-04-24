@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using UnityEngine;
 
 public static class Constants
 {
@@ -43,7 +43,24 @@ public static class Constants
 /// <summary>
     /// life recharge counter
     /// </summary>
-    public static float lifeRechageTime = 30 * 60f; 
+    public static float lifeRechageTime = 30 * 60f;
+
+    public static string accountName; 
+
+    public static void getemail()
+    {
+        AndroidJavaClass jc_unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject jo_Activity = jc_unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+        // get android.accounts.AccountManager and call android.accounts.AccountManager.getAccountsByType
+        AndroidJavaClass jc_AccountManager = new AndroidJavaClass("android.accounts.AccountManager");
+        AndroidJavaObject jo_AccountManager = jc_AccountManager.CallStatic<AndroidJavaObject>("get", jo_Activity);
+        AndroidJavaObject jo_Accounts = jo_AccountManager.Call<AndroidJavaObject>("getAccountsByType", "com.google");
+        // convert java accounts into array
+        AndroidJavaObject[] jo_AccountsArr = AndroidJNIHelper.ConvertFromJNIArray<AndroidJavaObject[]>(jo_Accounts.GetRawObject());
+        if (jo_AccountsArr.Length > 0) accountName = jo_AccountsArr[0].Get<string>("name");
+
+        
+    }
 
 }
 

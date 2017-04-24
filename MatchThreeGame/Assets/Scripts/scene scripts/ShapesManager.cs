@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class ShapesManager : MonoBehaviour
 {
-    public Text DebugText, ScoreText, movesText;
+    public Text DebugText, ScoreText, movesText, targetScore;
     public bool ShowDebugInfo = false;
     //candy graphics taken from http://opengameart.org/content/candy-pack-1
 
@@ -44,7 +44,6 @@ public class ShapesManager : MonoBehaviour
         DebugText.enabled = ShowDebugInfo;
     }
 
-    // Use this for initialization
     public void Start()
     {
         levelData = new LevelData(PlayerVariables.currentLevel);
@@ -56,7 +55,66 @@ public class ShapesManager : MonoBehaviour
 
         StartCheckForPotentialMatches();
 
+        targetScore.text = levelData.targetScore.ToString(); 
+
     }
+
+    public void Update()
+    {
+        if (ShowDebugInfo)
+            DebugText.text = DebugUtilities.GetArrayContents(shapes);
+
+
+        if (state == GameState.None)
+        {
+            //user has clicked or touched
+            if (Input.GetMouseButtonDown(0))
+            {
+                //get the hit position
+                var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+                if (hit.collider != null) //we have a hit!!!
+                {
+                    hitGo = hit.collider.gameObject;
+                    state = GameState.SelectionStarted;
+                }
+
+            }
+        }
+        else if (state == GameState.SelectionStarted)
+        {
+            //user dragged
+            if (Input.GetMouseButton(0))
+            {
+
+
+                var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+                //we have a hit
+                if (hit.collider != null && hitGo != hit.collider.gameObject)
+                {
+
+                    //user did a hit, no need to show him hints 
+                    StopCheckForPotentialMatches();
+
+                    //if the two shapes are diagonally aligned (different row and column), just return
+                    if (!Utilities.AreVerticalOrHorizontalNeighbors(hitGo.GetComponent<Shape>(),
+                        hit.collider.gameObject.GetComponent<Shape>()))
+                    {
+                        state = GameState.None;
+                    }
+                    else
+                    {
+                        state = GameState.Animating;
+                        FixSortingLayer(hitGo, hit.collider.gameObject);
+                        StartCoroutine(FindMatchesAndCollapse(hit));
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    // Use this for initialization
 
     /// <summary>
     /// Initialize shapes
@@ -199,58 +257,7 @@ public class ShapesManager : MonoBehaviour
 
 
     // Update is called once per frame
-    public void Update()
-    {
-        if (ShowDebugInfo)
-            DebugText.text = DebugUtilities.GetArrayContents(shapes);
-
-        if (state == GameState.None)
-        {
-            //user has clicked or touched
-            if (Input.GetMouseButtonDown(0))
-            {
-                //get the hit position
-                var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-                if (hit.collider != null) //we have a hit!!!
-                {
-                    hitGo = hit.collider.gameObject;
-                    state = GameState.SelectionStarted;
-                }
-                
-            }
-        }
-        else if (state == GameState.SelectionStarted)
-        {
-            //user dragged
-            if (Input.GetMouseButton(0))
-            {
-                
-
-                var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-                //we have a hit
-                if (hit.collider != null && hitGo != hit.collider.gameObject)
-                {
-
-                    //user did a hit, no need to show him hints 
-                    StopCheckForPotentialMatches();
-
-                    //if the two shapes are diagonally aligned (different row and column), just return
-                    if (!Utilities.AreVerticalOrHorizontalNeighbors(hitGo.GetComponent<Shape>(),
-                        hit.collider.gameObject.GetComponent<Shape>()))
-                    {
-                        state = GameState.None;
-                    }
-                    else
-                    {
-                        state = GameState.Animating;
-                        FixSortingLayer(hitGo, hit.collider.gameObject);
-                        StartCoroutine(FindMatchesAndCollapse(hit));
-                    }
-                }
-            }
-        }
-    }
-
+    
     /// <summary>
     /// Modifies sorting layers for better appearance when dragging/animating
     /// </summary>
@@ -313,10 +320,13 @@ public class ShapesManager : MonoBehaviour
             hitGoCache = sameTypeGo.GetComponent<Shape>();
         }
 
-        //decrease the players remaining moves
-        decreaseMoves();
+
 
         int timesRun = 1;
+        if (totalMatches.Count() >= Constants.MinimumMatches){
+            //decrease the players remaining moves
+            decreaseMoves();
+        }
         while (totalMatches.Count() >= Constants.MinimumMatches)
         {
             //increase score
@@ -369,6 +379,9 @@ public class ShapesManager : MonoBehaviour
             timesRun++;
         }
 
+        
+
+
         levelManager.manageLevelState(score, levelData.targetScore, remainingMoves);  
         state = GameState.None;
         StartCheckForPotentialMatches();
@@ -393,13 +406,6 @@ public class ShapesManager : MonoBehaviour
     }
 
 
-
-
-    /// <summary>
-    /// Spawns new candy in columns that have missing ones
-    /// </summary>
-    /// <param name="columnsWithMissingCandy"></param>
-    /// <returns>Info about new candies created</returns>
     private AlteredCandyInfo CreateNewCandyInSpecificColumns(IEnumerable<int> columnsWithMissingCandy)
     {
         AlteredCandyInfo newCandyInfo = new AlteredCandyInfo();
@@ -483,13 +489,13 @@ public class ShapesManager : MonoBehaviour
 
     private void ShowMoves()
     {
-        //movesText.text = remainingMoves.ToString(); 
+        movesText.text = "Moves: " + remainingMoves.ToString(); 
     }
 
     private void ShowScore()
     {
         //ScoreText.text = "Score: " + score.ToString();
-        //ScoreText.text = score.ToString() + " / " + levelData.targetScore.ToString();
+        ScoreText.text = "Score: " + score.ToString(); 
 
     }
 

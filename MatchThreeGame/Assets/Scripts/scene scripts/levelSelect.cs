@@ -17,6 +17,17 @@ public class levelSelect : MonoBehaviour {
         SceneManager.LoadScene(levelName);
     }
 
+    public void openGameplayLevel(string levelName)
+    {
+        PlayerVariables.currentLevel = levelName; 
+        SceneManager.LoadScene("Level_0");
+    }
+    
+    public void openHighScoreLevel(string levelName)
+    {
+        PlayerVariables.currentLevel = levelName;
+        SceneManager.LoadScene("Highscores");
+    }
     public void NextLevelButton(string levelName, bool gameLevel)
     {
         if (gameLevel)

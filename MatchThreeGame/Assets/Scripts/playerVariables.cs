@@ -6,6 +6,8 @@ using System.Text;
 class PlayerVariables
 {
     static private JSONObject playerJson;
+    public static string currentLevel;
+    public static int newScore;
 
     public static JSONObject PlayerJson
     {
@@ -18,7 +20,7 @@ class PlayerVariables
             playerJson = value;
         }
     }
-    public static string currentLevel; 
+
 
 
     public static int getInt(string field)

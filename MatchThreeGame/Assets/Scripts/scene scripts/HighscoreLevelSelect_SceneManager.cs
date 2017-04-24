@@ -3,25 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenu_SceneManager : MonoBehaviour
-{
+public class HighscoreLevelSelect_SceneManager : MonoBehaviour {
     GameObject background;
     GameObject hearts;
     GameObject coins;
     public Text coinsText;
     public Text heartsText;
-    
+
     // Use this for initialization
-    void Start()
-    {
-        initHud();
+    void Start () {
+        initHud(); 
 
     }
+	
+	// Update is called once per frame
+	void Update () {
+        updateHud(); 
 
-    // Update is called once per frame
-    void Update()
-    {
-        updateHud();
     }
 
     void initHud()
@@ -35,11 +33,12 @@ public class MainMenu_SceneManager : MonoBehaviour
         //DontDestroyOnLoad(coins);
         //DontDestroyOnLoad(heartsText);
         //DontDestroyOnLoad(coinsText);
-        coinsText.text = "x" + PlayerVariables.getInt("currentCoins").ToString(); 
+        coinsText.text = "x" + PlayerVariables.getInt("currentCoins").ToString();
         heartsText.text = "x" + PlayerVariables.getInt("lives").ToString();
 
 
     }
+
 
     void updateHud()
     {

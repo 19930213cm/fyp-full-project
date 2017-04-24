@@ -3,31 +3,75 @@ var  initDb = require("./initDb.js");
 
 var nano = initDb.nano;
 
-function sendFitnessData(data, callback){
-    var playerDb = nano.db.use("match3players");
 
-    async.waterfall([
-      function getPlayerDoc(asyncCb){
-        playerDb.get(data.email, function( err, doc){
-          asyncCb(err, doc);
-        })
-      },
-      function updateAndPostPlayerDoc( doc, asyncCb){
-        doc.todaysSteps = data.steps;
-        doc.lastLogin = new Date(data.date);
-        playerDb.insert(doc, function( err, res){
-          asyncCb(err, res);
-        })
-      }
-    ], function (err, res ){
-      if (err){
-        callback(err);
-      } else {
-        callback( null, res);
-      }
-    })
+/*Functions around the creation of new lives based on a timer*/
+function generateNewLife(playerId, callback){
+  var playerDb = nano.db.use("match3players");
+  playerDb.get(playerId, function(err, res){
+    if (err){
+      callback(err)
+    } else {
+      callback(null, res)
+      setTimeout(function(){
+        processNewLifeRequest(playerId);
+      }, 3000 );
+    }
+  })
 }
+function processNewLifeRequest(playerId){
+  var playerDb = nano.db.use("match3players");
+  playerDb.get(playerId, function(err, doc){
+    if (err){
+      console.error(err);
+    } else {
+      var lives = parseInt(doc.lives);
+      var maxLives = parseInt(doc.maxLives);
+      lives ++;
+      var livesString = lives.toString();
+      doc.lives = livesString;
+        playerDb.insert(doc, function(err, res){
+          if (err){
+            console.error(err);
+          } else {
+            if (lives < maxLives){
+              setTimeout(function(){
+                processNewLifeRequest(playerId);
+              }, 3000 );
+            } else {
+              console.log(res);
+            }
+          }
+        })
+    }
+  })
+}
+/*end of section*/
 
+
+function sendFitnessData(data, callback){
+  var playerDb = nano.db.use("match3players");
+
+  async.waterfall([
+    function getPlayerDoc(asyncCb){
+      playerDb.get(data.email, function( err, doc){
+        asyncCb(err, doc);
+      })
+    },
+    function updateAndPostPlayerDoc( doc, asyncCb){
+      doc.todaysSteps = data.steps;
+      doc.lastLogin = new Date(data.date);
+      playerDb.insert(doc, function( err, res){
+        asyncCb(err, res);
+      })
+    }
+  ], function (err, res ){
+    if (err){
+      callback(err);
+    } else {
+      callback( null, res);
+    }
+  })
+}
 function findPlayer(player, email) {
   return player.email === email;
 }
@@ -50,21 +94,20 @@ function processPlayerScore(player, callback){
 
   async.waterfall([
     function getHighscoresForLevel (asyncCb){
-      highscoresDb.get(player.level, function(err, doc){
+      highscoresDb.get(player.levelName, function(err, doc){
         asyncCb(err, doc);
       })
     },
     function processHighScore(doc , asyncCb){
       var playerScore = {
-        score: player.score,
-        name: player.name,
-        email: player.email
+        score: parseInt(player.score),
+        email: player.playerId
       }
 
       //check if the player already exists
       //if true remove it
 
-      var index = findIndex("email", player.email, doc.scores)
+      var index = findIndex("email", player.playerId, doc.scores)
       console.log("index");
       console.log(index);
       if (index != null){
@@ -98,25 +141,7 @@ function processPlayerScore(player, callback){
       }
 
       highscoresDb.insert(doc, function( err, res){
-        asyncCb(err)
-      })
-    },
-    function getPlayerDoc(asyncCb){
-      playerDb.get(player.email, function( err, doc){
-        asyncCb(err, doc)
-      })
-    },
-    function updatePlayerDoc(doc , asyncCb){
-      var obj = {
-        score: player.score,
-        stars: player.stars,
-        complete: true
-      }
-      doc[player.level] = obj;
-      doc.unlockedLevel ++;
-
-      playerDb.insert(doc, function( err, res){
-        asyncCb(err,res);
+        asyncCb(err, res)
       })
     }
   ], function( err, res){
@@ -128,7 +153,6 @@ function processPlayerScore(player, callback){
   })
 }
 
-//currently retrievs the top 20 scores
 function getTopScores(level, numberToFetch ,callback){
   var highscoresDb = nano.db.use("highscores");
   highscoresDb.get(level, function(err, doc){
@@ -275,3 +299,4 @@ exports.getScoresAroundPlayer = getScoresAroundPlayer;
 exports.getPlayerDoc = getPlayerDoc;
 exports.sendFitnessData = sendFitnessData;
 exports.postPlayerDoc = postPlayerDoc;
+exports.generateNewLife = generateNewLife;

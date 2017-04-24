@@ -20,7 +20,7 @@ public class LevelManager : MonoBehaviour
                 outOfMoves();
             }else
             {
-                completeLevel();
+                completeLevel(score);
 
             }
 
@@ -45,24 +45,26 @@ public class LevelManager : MonoBehaviour
         int lives = int.Parse(param);
         lives--;
         obj.SetField("lives", lives);
-
-        nodeServerCalls.sendPlayerDoc(); 
+        nodeServerCalls.sendPlayerDoc();
+        nodeServerCalls.requestNewLife(); 
         SceneManager.LoadScene("GameOverScene");
 
     }
 
-    private void completeLevel()
+    private void completeLevel(int score)
     {
 
         string param = obj.GetField("currentLevel").ToString(); 
         param = param.Replace("\"", "");
         int level = int.Parse(param);
         level++;
-        obj.SetField("currentLevel", level); 
+        obj.SetField("currentLevel", level);
+        //obj.SetField(PlayerVariables.currentLevel, score);/* KC*/
+        PlayerVariables.newScore = score; 
 
         nodeServerCalls.sendPlayerDoc();
         SceneManager.LoadScene("LevelComplete");
-
+        
         //upload score to server
         //show scores of other users
     }

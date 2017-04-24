@@ -3,6 +3,44 @@ var router = express.Router();
 
 var functions = require('../src/playerDatabaseFunctions');
 
+router.route("/getHighscores").get(function (req, res){
+    functions.getTopScores( req.query.levelName, 10, function(error, response){
+    if(error){
+      console.log(error);
+      res.status(error.statusCode).send(error);
+    } else{
+      res.status(200).send(response);
+      console.log( response);
+    }
+  })
+})
+
+router.route("/sendHighscore").get(function (req, res){
+  console.log(req.query);
+    functions.processPlayerScore( req.query, function(error, response){
+    if(error){
+      console.log(error);
+      res.status(error.statusCode).send(error);
+    } else{
+      res.status(200).send(response);
+      console.log( response);
+    }
+  })
+})
+
+
+router.route("/generateNewLife").get(function (req, res){
+    functions.generateNewLife( req.query.playerId,function(error, response){
+    if(error){
+      console.log(error);
+      res.status(error.statusCode).send(error);
+    } else{
+      res.status(200).send(response);
+      console.log( response);
+    }
+  })
+})
+
 router.route("/getPlayerDoc").get(function (req, res){
     functions.getPlayerDoc( req.query.playerId,function(error, response){
     if(error){

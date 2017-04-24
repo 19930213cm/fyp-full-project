@@ -12,17 +12,49 @@ public static class nodeServerCalls
     //public static string baseUrl = "http://10.0.2.2:3000";
     //public static string baseUrl = "http://192.168.0.18:3000";
     public static string baseUrl = "http://localhost:3000";
-
+    static string mEmail = "christophertmartin1993@gmail.com";
     const short MyBeginMsg = 1002;
 
     static NetworkClient m_client; 
 
     public static void instantiatePlayerJson()
     {
-        string mEmail = "christophertmartin1993@gmail.com";
+        
         Debug.Log("email call:" + mEmail);
         JSONObject j = getPlayerDoc(mEmail);
         PlayerVariables.PlayerJson = j;
+    }
+
+    public static JSONObject requestNewLife()
+    {
+        var responseValue = string.Empty;
+        string url = baseUrl + "/match3/generateNewLife";
+        UriBuilder builder = new UriBuilder(url);
+        string query = "playerId=" + mEmail;
+        builder.Query = query;
+        return getCall(builder);
+    }
+
+
+    public static JSONObject getHighscores(string levelName)
+    {
+        var responseValue = string.Empty;
+        string url = baseUrl + "/match3/getHighscores";
+        UriBuilder builder = new UriBuilder(url);
+        string query = "levelName=" + levelName;
+        builder.Query = query;
+        return getCall(builder);
+    }
+
+    public static JSONObject sendHighscores(string levelName, int score)
+    {
+        var responseValue = string.Empty;
+        string url = baseUrl + "/match3/sendHighscore";
+        UriBuilder builder = new UriBuilder(url);
+        string query = "levelName=" + levelName + "&playerId=" + mEmail + "&score=" + score;
+        query = query.Replace("\"", "");
+        builder.Query = query;
+        return getCall(builder);
     }
 
     public static JSONObject getPlayerDoc(string playerId)
@@ -147,18 +179,18 @@ public static class nodeServerCalls
 
 
 
-    public static void SendReadyToBeginMessage(int myId)
-    {
-        var msg = new IntegerMessage(myId);
-        m_client.Send(MyBeginMsg, msg);
-    }
+    //public static void SendReadyToBeginMessage(int myId)
+    //{
+    //    var msg = new IntegerMessage(myId);
+    //    m_client.Send(MyBeginMsg, msg);
+    //}
 
     public static void Init()
     {
         m_client = new NetworkClient();
         m_client.Connect("localhost", 3000);
         NetworkServer.RegisterHandler(MyBeginMsg, OnServerReadyToBeginMessage);
-        SendReadyToBeginMessage(1); 
+        //SendReadyToBeginMessage(1); 
     }
 
     static void OnServerReadyToBeginMessage(NetworkMessage netMsg)
