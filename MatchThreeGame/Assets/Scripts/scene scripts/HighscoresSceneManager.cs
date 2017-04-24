@@ -42,8 +42,10 @@ public class HighscoresSceneManager : MonoBehaviour {
 
         for (var i = 0; i < objHighscores.Count; i++)
         {
+            string playerid = objHighscores[i].GetField("email").str;
+            string[] playeridspl = playerid.Split('@'); 
             textHighscores[i].text = i + 1 + ". "; 
-            textHighscores[i + (textHighscores.Length / 3)].text = objHighscores[i].GetField("email").str;
+            textHighscores[i + (textHighscores.Length / 3)].text = playeridspl[0];
             textHighscores[i+ (textHighscores.Length /3 * 2)].text = objHighscores[i].GetField("score").i.ToString();
         }
     }
@@ -58,10 +60,7 @@ public class HighscoresSceneManager : MonoBehaviour {
         GameObject panel = GameObject.Find("hsPanel");
         textHighscores = panel.GetComponentsInChildren<Text>();
 
-        foreach (Text t in textHighscores)
-        {
-            t.text = "test";
-        }
+
     }
 
     void initHud()

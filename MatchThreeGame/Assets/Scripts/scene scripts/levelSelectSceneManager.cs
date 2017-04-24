@@ -60,6 +60,8 @@ public class levelSelectSceneManager : MonoBehaviour {
 
     void canOpenLevel()
     {
+        Button[] buttons = GameObject.Find("Canvas").GetComponentsInChildren<Button>();
+
         if (checkHasLives())
         {
             string param = PlayerVariables.PlayerJson.GetField("currentLevel").ToString();
@@ -67,16 +69,21 @@ public class levelSelectSceneManager : MonoBehaviour {
             //int playersCurrentLevel = int.Parse(param);
             int playersCurrentLevel = PlayerVariables.getInt("currentLevel"); 
 
-           Button[] buttons = GameObject.Find("Canvas").GetComponentsInChildren<Button>();
              //= this.GetComponentsInChildren<Button>(); 
             for (int i = playersCurrentLevel; i < buttons.Length; i++)
             {
-                if (PlayerVariables.getInt("lives") < 1)
-                {
-                    buttons[i].interactable = false;
-                    buttons[i].GetComponent<Text>().text = "Out of lives";
-                }
+                buttons[i].interactable = false;
+
             }
+        } else
+        {
+            foreach (Button b in buttons)
+            {
+                b.interactable = false; 
+                
+            }
+
+            buttons[buttons.Length - 1].interactable = true; 
         }
 
         //disable buttons
@@ -102,8 +109,8 @@ public class levelSelectSceneManager : MonoBehaviour {
         //DontDestroyOnLoad(coins);
         //DontDestroyOnLoad(heartsText);
         //DontDestroyOnLoad(coinsText);
-        coinsText.text = "x" + PlayerVariables.getInt("currentCoins").ToString();
-        heartsText.text = "x" + PlayerVariables.getInt("lives").ToString();
+        coinsText.text =  PlayerVariables.getInt("currentCoins").ToString();
+        heartsText.text =  PlayerVariables.getInt("lives").ToString();
 
 
     }
@@ -111,7 +118,7 @@ public class levelSelectSceneManager : MonoBehaviour {
 
     void updateHud()
     {
-        coinsText.text = "x" + PlayerVariables.getInt("currentCoins").ToString();
-        heartsText.text = "x" + PlayerVariables.getInt("lives").ToString();
+        coinsText.text = PlayerVariables.getInt("currentCoins").ToString();
+        heartsText.text = PlayerVariables.getInt("lives").ToString();
     }
 }

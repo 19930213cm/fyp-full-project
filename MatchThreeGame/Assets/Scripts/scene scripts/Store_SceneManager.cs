@@ -39,8 +39,8 @@ public class Store_SceneManager : MonoBehaviour {
 
     void updateHud()
     {
-        coinsText.text = "x" + PlayerVariables.getInt("currentCoins").ToString();
-        heartsText.text = "x" + PlayerVariables.getInt("lives").ToString();
+        coinsText.text =  PlayerVariables.getInt("currentCoins").ToString();
+        heartsText.text =  PlayerVariables.getInt("lives").ToString();
     }
 
     public void refreshLives()

@@ -4,11 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class GameOver_SceneManager : MonoBehaviour {
-    Text reasonText; 
-	// Use this for initialization
-	void Start () {
+    Text reasonText;
+    GameObject coins ;
+    GameObject hearts;
+    // Use this for initialization
+    void Start () {
+        coins = GameObject.Find("coins_0");
+        hearts = GameObject.Find("heart");
         getText();
-        setText(); 
+        setText();
+        initHud();
 	}
 	
 	// Update is called once per frame
@@ -16,9 +21,11 @@ public class GameOver_SceneManager : MonoBehaviour {
 		
 	}
 
+
     void OnDestroy()
     {
-
+        hearts.SetActive(true);
+        coins.SetActive(true);
     }
 
     void getText()
@@ -31,5 +38,21 @@ public class GameOver_SceneManager : MonoBehaviour {
     void setText()
     {
         reasonText.text = "You ran out of moves"; 
+    }
+
+    void initHud()
+    {
+
+
+        coins.SetActive(false);
+        hearts.SetActive(false);
+        //DontDestroyOnLoad(hearts);
+        //DontDestroyOnLoad(background);
+        //DontDestroyOnLoad(coins);
+        //DontDestroyOnLoad(heartsText);
+        //DontDestroyOnLoad(coinsText);
+
+
+
     }
 }

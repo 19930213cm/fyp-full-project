@@ -27,7 +27,9 @@ public class ShapesManager : MonoBehaviour
     public GameObject[] CandyPrefabs;
     public GameObject[] ExplosionPrefabs;
     public GameObject[] BonusPrefabs;
-    public GameObject[] sceneManager; 
+    public GameObject[] sceneManager;
+    GameObject coins;
+    GameObject hearts;
 
     public string levelName;
     public LevelManager levelManager; 
@@ -46,6 +48,9 @@ public class ShapesManager : MonoBehaviour
 
     public void Start()
     {
+        coins = GameObject.Find("coins_0");
+        hearts = GameObject.Find("heart");
+        initHud(); 
         levelData = new LevelData(PlayerVariables.currentLevel);
         levelManager = new LevelManager();
 
@@ -55,8 +60,13 @@ public class ShapesManager : MonoBehaviour
 
         StartCheckForPotentialMatches();
 
-        targetScore.text = levelData.targetScore.ToString(); 
+        targetScore.text =  "Target\n" + levelData.targetScore.ToString(); 
 
+    }
+    private void OnDestroy()
+    {
+        hearts.SetActive(true);
+        coins.SetActive(true); 
     }
 
     public void Update()
@@ -112,7 +122,21 @@ public class ShapesManager : MonoBehaviour
         }
     }
 
+    void initHud()
+    {
 
+
+        coins.SetActive(false);
+        hearts.SetActive(false); 
+        //DontDestroyOnLoad(hearts);
+        //DontDestroyOnLoad(background);
+        //DontDestroyOnLoad(coins);
+        //DontDestroyOnLoad(heartsText);
+        //DontDestroyOnLoad(coinsText);
+
+
+
+    }
 
     // Use this for initialization
 
@@ -489,13 +513,13 @@ public class ShapesManager : MonoBehaviour
 
     private void ShowMoves()
     {
-        movesText.text = "Moves: " + remainingMoves.ToString(); 
+        movesText.text = remainingMoves.ToString(); 
     }
 
     private void ShowScore()
     {
         //ScoreText.text = "Score: " + score.ToString();
-        ScoreText.text = "Score: " + score.ToString(); 
+        ScoreText.text = "Score: \n " + score.ToString(); 
 
     }
 

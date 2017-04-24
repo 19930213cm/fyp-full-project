@@ -14,7 +14,7 @@ function generateNewLife(playerId, callback){
       callback(null, res)
       setTimeout(function(){
         processNewLifeRequest(playerId);
-      }, 3000 );
+      }, 1000 * 60 * 30 );
     }
   })
 }
@@ -36,7 +36,7 @@ function processNewLifeRequest(playerId){
             if (lives < maxLives){
               setTimeout(function(){
                 processNewLifeRequest(playerId);
-              }, 3000 );
+              }, 1000 * 60 * 30 );
             } else {
               console.log(res);
             }
@@ -227,7 +227,7 @@ function getPlayerDoc(playerId, callback){
       if (err.statusCode == 404){
         var response = {
           statusCode: 200,
-          message: "new player doc created",
+          message: "new player doc created",          
           body: {
             email: playerId,
             name: "",
@@ -244,7 +244,8 @@ function getPlayerDoc(playerId, callback){
             },
             lives: 5,
             currentLevel: 1,
-            dailyClaimed: false
+            dailyClaimed: false,
+            maxLives: "5",
           }
         }
         playerDb.insert(response.body, playerId, function(err, res){

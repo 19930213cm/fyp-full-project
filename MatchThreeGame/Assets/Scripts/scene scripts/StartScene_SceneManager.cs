@@ -11,6 +11,8 @@ public class StartScene_SceneManager : MonoBehaviour
     GameObject background;
     GameObject hearts;
     GameObject coins;
+    GameObject music;
+
     public Text coinsText;
     public Text heartsText;
 
@@ -18,7 +20,8 @@ public class StartScene_SceneManager : MonoBehaviour
     {
         nodeServerCalls.instantiatePlayerJson(); 
         initHud();
-        initSocketConnection();
+  
+        print("yasen is a silly goose" + Constants.getemail()); 
     }
 
     // Update is called once per frame
@@ -41,6 +44,8 @@ public class StartScene_SceneManager : MonoBehaviour
         background = GameObject.Find("candyBackground");
         coins = GameObject.Find("coins_0");
         hearts = GameObject.Find("heart");
+        music= GameObject.Find("music");
+
         coins.SetActive(false);
         hearts.SetActive(false);
 
@@ -49,14 +54,12 @@ public class StartScene_SceneManager : MonoBehaviour
         DontDestroyOnLoad(coins);
         DontDestroyOnLoad(heartsText);
         DontDestroyOnLoad(coinsText);
+        DontDestroyOnLoad(music);
 
         //Text cameraLabel = GameObject.Find("Canvas/Camera Label").GetComponent<Text>();
     }
 
-    void initSocketConnection()
-    {
-        nodeServerCalls.Init(); 
-    } 
+
     void OnDestroy()
     {
         print("Script was destroyed");

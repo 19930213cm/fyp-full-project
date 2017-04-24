@@ -10,16 +10,16 @@ public static class nodeServerCalls
 {
     //android emulator
     //public static string baseUrl = "http://10.0.2.2:3000";
-    //public static string baseUrl = "http://192.168.0.18:3000";
-    public static string baseUrl = "http://localhost:3000";
-    static string mEmail = "christophertmartin1993@gmail.com";
+    public static string baseUrl = "http://192.168.0.18:3000";
+    //public static string baseUrl = "http://localhost:3000";
+    static string mEmail = Constants.getemail(); 
     const short MyBeginMsg = 1002;
 
     static NetworkClient m_client; 
 
     public static void instantiatePlayerJson()
     {
-        
+
         Debug.Log("email call:" + mEmail);
         JSONObject j = getPlayerDoc(mEmail);
         PlayerVariables.PlayerJson = j;
@@ -185,13 +185,13 @@ public static class nodeServerCalls
     //    m_client.Send(MyBeginMsg, msg);
     //}
 
-    public static void Init()
-    {
-        m_client = new NetworkClient();
-        m_client.Connect("localhost", 3000);
-        NetworkServer.RegisterHandler(MyBeginMsg, OnServerReadyToBeginMessage);
-        //SendReadyToBeginMessage(1); 
-    }
+    //public static void Init()
+    //{
+    //    m_client = new NetworkClient();
+    //    m_client.Connect("localhost", 3000);
+    //    NetworkServer.RegisterHandler(MyBeginMsg, OnServerReadyToBeginMessage);
+    //    //SendReadyToBeginMessage(1); 
+    //}
 
     static void OnServerReadyToBeginMessage(NetworkMessage netMsg)
     {

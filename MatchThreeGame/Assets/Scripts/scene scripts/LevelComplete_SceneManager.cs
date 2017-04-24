@@ -6,9 +6,13 @@ using UnityEngine.UI;
 public class LevelComplete_SceneManager : MonoBehaviour {
     Text newHighscore;
     Text scoreText;
-    Text[] editTexts; 
+    Text[] editTexts;
+    GameObject coins;
+    GameObject hearts ;
     // Use this for initialization
     void Start () {
+        coins = GameObject.Find("coins_0");
+        hearts = GameObject.Find("heart");
         initUi();
         sendHighscore();
 
@@ -18,7 +22,27 @@ public class LevelComplete_SceneManager : MonoBehaviour {
     void Update () {
 
     }
+    void initHud()
+    {
 
+
+        coins.SetActive(false);
+        hearts.SetActive(false);
+        //DontDestroyOnLoad(hearts);
+        //DontDestroyOnLoad(background);
+        //DontDestroyOnLoad(coins);
+        //DontDestroyOnLoad(heartsText);
+        //DontDestroyOnLoad(coinsText);
+
+
+
+    }
+
+    void OnDestroy()
+    {
+        hearts.SetActive(true);
+        coins.SetActive(true);
+    }
     void initUi()
     {
         GameObject canvas = GameObject.Find("editCanvas");

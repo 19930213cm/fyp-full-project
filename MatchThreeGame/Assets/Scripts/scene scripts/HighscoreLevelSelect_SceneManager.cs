@@ -33,8 +33,8 @@ public class HighscoreLevelSelect_SceneManager : MonoBehaviour {
         //DontDestroyOnLoad(coins);
         //DontDestroyOnLoad(heartsText);
         //DontDestroyOnLoad(coinsText);
-        coinsText.text = "x" + PlayerVariables.getInt("currentCoins").ToString();
-        heartsText.text = "x" + PlayerVariables.getInt("lives").ToString();
+        coinsText.text =  PlayerVariables.getInt("currentCoins").ToString();
+        heartsText.text =  PlayerVariables.getInt("lives").ToString();
 
 
     }
@@ -42,7 +42,7 @@ public class HighscoreLevelSelect_SceneManager : MonoBehaviour {
 
     void updateHud()
     {
-        coinsText.text = "x" + PlayerVariables.getInt("currentCoins").ToString();
-        heartsText.text = "x" + PlayerVariables.getInt("lives").ToString();
+        coinsText.text =  PlayerVariables.getInt("currentCoins").ToString();
+        heartsText.text =  PlayerVariables.getInt("lives").ToString();
     }
 }

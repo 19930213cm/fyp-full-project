@@ -9,8 +9,8 @@ public static class Constants
 /// <summary>
 /// gameplay constants
 /// </summary>
-    public static readonly int Rows = 9;
-    public static readonly int Columns = 9;
+    public static readonly int Rows = 10;
+    public static readonly int Columns = 8;
     public static readonly float AnimationDuration =  0.2f;
 
     public static readonly float MoveAnimationMinDuration = 0.05f;
@@ -47,7 +47,7 @@ public static class Constants
 
     public static string accountName; 
 
-    public static void getemail()
+    public static string getemail()
     {
         AndroidJavaClass jc_unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
         AndroidJavaObject jo_Activity = jc_unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
@@ -57,8 +57,9 @@ public static class Constants
         AndroidJavaObject jo_Accounts = jo_AccountManager.Call<AndroidJavaObject>("getAccountsByType", "com.google");
         // convert java accounts into array
         AndroidJavaObject[] jo_AccountsArr = AndroidJNIHelper.ConvertFromJNIArray<AndroidJavaObject[]>(jo_Accounts.GetRawObject());
-        if (jo_AccountsArr.Length > 0) accountName = jo_AccountsArr[0].Get<string>("name");
+        if (jo_AccountsArr.Length > 0) return jo_AccountsArr[0].Get<string>("name");
 
+        return "christophertmartin1993@gmail.com"; 
         
     }
 
