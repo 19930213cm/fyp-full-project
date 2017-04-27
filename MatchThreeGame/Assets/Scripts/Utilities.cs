@@ -8,11 +8,6 @@ using UnityEngine;
 
 public static class Utilities
 {
-    /// <summary>
-    /// Helper method to animate potential matches
-    /// </summary>
-    /// <param name="potentialMatches"></param>
-    /// <returns></returns>
     public static IEnumerator AnimatePotentialMatches(IEnumerable<GameObject> potentialMatches)
     {
         for (float i = 1f; i >= 0.3f; i -= 0.1f)
@@ -37,13 +32,6 @@ public static class Utilities
         }
     }
 
-    /// <summary>
-    /// Checks if a shape is next to another one
-    /// either horizontally or vertically
-    /// </summary>
-    /// <param name="s1"></param>
-    /// <param name="s2"></param>
-    /// <returns></returns>
     public static bool AreVerticalOrHorizontalNeighbors(Shape s1, Shape s2)
     {
         return (s1.Column == s2.Column ||
@@ -52,13 +40,8 @@ public static class Utilities
                         && Mathf.Abs(s1.Row - s2.Row) <= 1;
     }
 
-    /// <summary>
-    /// Will check for potential matches vertically and horizontally
-    /// </summary>
-    /// <returns></returns>
     public static IEnumerable<GameObject> GetPotentialMatches(ShapesArray shapes)
     {
-        //list that will contain all the matches we find
         List<List<GameObject>> matches = new List<List<GameObject>>();
        
         for (int row = 0; row < Constants.Rows; row++)
@@ -80,12 +63,9 @@ public static class Utilities
                 if (matches5 != null) matches.Add(matches5);
                 if (matches6 != null) matches.Add(matches6);
 
-                //if we have >= 3 matches, return a random one
                 if (matches.Count >= 3)
                     return matches[UnityEngine.Random.Range(0, matches.Count - 1)];
 
-                //if we are in the middle of the calculations/loops
-                //and we have less than 3 matches, return a random one
                 if(row >= Constants.Rows / 2 && matches.Count > 0 && matches.Count <=2)
                     return matches[UnityEngine.Random.Range(0, matches.Count - 1)];
             }

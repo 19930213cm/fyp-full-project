@@ -58,11 +58,6 @@ public static class DebugUtilities
         Debug.Log(GetArrayContents(shapes));
     }
 
-    /// <summary>
-    /// Creates a string with the contents of the shapes array
-    /// </summary>
-    /// <param name="shapes"></param>
-    /// <returns></returns>
     public static string GetArrayContents(ShapesArray shapes)
     {
         string x = string.Empty;

@@ -59,7 +59,6 @@ function sendFitnessData(data, callback){
     },
     function updateAndPostPlayerDoc( doc, asyncCb){
       doc.todaysSteps = data.steps;
-      doc.lastLogin = new Date(data.date);
       playerDb.insert(doc, function( err, res){
         asyncCb(err, res);
       })
@@ -225,13 +224,15 @@ function getPlayerDoc(playerId, callback){
   playerDb.get(playerId, function(err, doc){
     if (err){
       if (err.statusCode == 404){
+        var d = new Date();
+        var n = d.getTime();
         var response = {
           statusCode: 200,
           message: "new player doc created",
           body: {
             email: playerId,
             name: "",
-            lastLogin: new Date(),
+            lastLogin: n,
             loginTally: 1,
             currentLevel: 1,
             currentCoins: 0,
@@ -260,14 +261,19 @@ function getPlayerDoc(playerId, callback){
       }
     } else {
       var d = new Date();
-      var lastLogin = doc.lastLogin;
+      var lastLogin = new Date(doc.lastLogin) ;
       var dailyClaimed = doc.dailyClaimed;
-      if (dailyClaimed == true){
+
+      if (dailyClaimed === "true"){
         if (lastLogin.getDate() != d.getDate()){
+          console.log("working");
           dailyClaimed = false
         }
       }
-      doc.lastLogin = d;
+      doc.lastLogin = d.getTime();
+      playerDb.insert(doc, function(err, res){
+
+      })
       callback(null, doc)
     }
   })

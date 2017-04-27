@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 public class Rewards_SceneManager : MonoBehaviour {
     JSONObject obj = PlayerVariables.PlayerJson;
-    Button claimRewardButton;
+    public Button claimRewardButton;
     Text steps;
     Text gold;
     Text lives; 
 
     // Use this for initialization
     void Start () {
-        claimRewardButton = findClaimRewardButton();
+        //claimRewardButton = findClaimRewardButton();
         initScene();
         initText(); 
 
@@ -103,13 +103,16 @@ public class Rewards_SceneManager : MonoBehaviour {
         }
     } 
 
-    void claimReward()
+   public  void claimReward()
     {
         claimRewardButton.interactable = false;
         claimRewardButton.GetComponentInChildren<Text>().text = "Claimed for today";
         PlayerVariables.PlayerJson.SetField("dailyClaimed", true);
         int currentCoins = PlayerVariables.getInt("currentCoins");
-        currentCoins += Constants.dailyReward;  
+        currentCoins += Constants.dailyReward;
+        PlayerVariables.PlayerJson.SetField("currentCoins", currentCoins);
+        nodeServerCalls.sendPlayerDoc(); 
+        gold.text = currentCoins.ToString(); 
 
         //update coin counter if added to this scene
     }

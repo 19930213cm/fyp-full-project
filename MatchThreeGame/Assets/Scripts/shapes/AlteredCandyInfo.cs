@@ -10,9 +10,6 @@ public class AlteredCandyInfo
     private List<GameObject> newCandy { get; set; }
     public int MaxDistance { get; set; }
 
-    /// <summary>
-    /// Returns distinct list of altered candy
-    /// </summary>
     public IEnumerable<GameObject> AlteredCandy
     {
         get

@@ -11,7 +11,7 @@ public static class nodeServerCalls
     //android emulator
     //public static string baseUrl = "http://10.0.2.2:3000";
     public static string baseUrl = "http://192.168.0.18:3000";
-    //public static string baseUrl = "http://localhost:3000";
+   //public static string baseUrl = "http://localhost:3000";
     static string mEmail = Constants.getemail(); 
     const short MyBeginMsg = 1002;
 

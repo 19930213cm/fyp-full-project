@@ -37,8 +37,11 @@ public class HighscoresSceneManager : MonoBehaviour {
     void setTextFields()
     {
  
-
-        print(objHighscores[0].ToString());
+        for (var i = 0; i < objHighscores.Count; i++)
+        {
+            textHighscores[i].text = ""; 
+        }
+            print(objHighscores[0].ToString());
 
         for (var i = 0; i < objHighscores.Count; i++)
         {

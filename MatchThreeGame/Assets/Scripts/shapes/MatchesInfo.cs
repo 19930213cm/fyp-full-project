@@ -8,10 +8,6 @@ using UnityEngine;
 public class MatchesInfo
 {
     private List<GameObject> matchedCandies;
-
-    /// <summary>
-    /// Returns distinct list of matched candy
-    /// </summary>
     public IEnumerable<GameObject> MatchedCandy
     {
         get
